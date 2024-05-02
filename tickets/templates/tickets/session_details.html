@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<title>Session Details</title>
+<link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">{% include 'nav.html' %}</div>
+    <h2>Session Details</h2>
+    <p>Date: {{ session.start_time|date:"Y-m-d" }}</p>
+    <p>Time: {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}</p>
+    <h3>Seats:</h3>
+    <ul>
+        {% for seat in seats %}
+        <li>{{ seat.seat_number }} - {% if seat.is_occupied %} Occupied {% else %} Available {% endif %}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'book_seat' session_id=session.pk %}" class="btn btn-primary">Book a Seat</a>
+</div>
+{% endblock %}

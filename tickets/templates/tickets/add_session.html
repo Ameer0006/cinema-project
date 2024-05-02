@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <title>Add New Session for {{ movie.title }}</title>
+  <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">{% include 'nav.html' %}
+  <div class="container mt-5">
+    <h2>Add New Session for {{ movie.title }}</h2>
+    <form method="POST" enctype="multipart/form-data" class="mt-3">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_movie" class="form-label">Movie</label>
+            <select class="form-control" id="id_movie" name="movie">
+              <option value="{{ movie.id }}" selected>{{ movie.title }}</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="id_start_time" class="form-label">Start Time</label>
+            <input type="datetime-local" class="form-control" id="id_start_time" name="start_time">
+        </div>
+        <div class="mb-3">
+            <label for="id_end_time" class="form-label">End Time</label>
+            <input type="datetime-local" class="form-control" id="id_end_time" name="end_time">
+        </div>
+        <div class="mb-3">
+            <label for="id_num_seats" class="form-label">Number of Seats</label>
+            <input type="number" class="form-control" id="id_num_seats" name="num_seats" placeholder="Number of seats">
+        </div>
+        <button type="submit" class="btn btn-primary">Create Session</button>
+    </form>
+  </div>
+  </div>
+</div>
+{% endblock %}

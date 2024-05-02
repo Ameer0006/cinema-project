@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<title>{{ movie.title }}</title>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">{% include 'nav.html' %}</div>
+  <div class="row">
+      <div class="col-md-12">
+          <div class="card mb-3">
+              <img src="{{ movie.poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+              <div class="card-body">
+                  <h5 class="card-title">{{ movie.title }}</h5>
+                  <p class="card-text">{{ movie.description }}</p>
+                  <p class="card-text"><small class="text-muted">Released on {{ movie.release_date|date:"Y-m-d" }}</small></p>
+                  <a href="{% url 'edit_movie' pk=movie.pk %}" class="btn btn-primary">Edit</a>
+                  <form action="{% url 'delete_movie' pk=movie.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this?');">Delete</button>
+                </form>
+                  <a href="{% url 'session_list' movie_id=movie.pk %}" class="btn btn-info">View Sessions</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

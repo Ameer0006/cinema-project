@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<title>Home Page - Cinema Listings</title>
+<link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">{% include 'nav.html' %}</div>
+    <div class="row mt-5">
+        <div class="col-12 card p-3">
+            <div class="col-12 d-flex justify-content-between items-center">
+                <h3>Latest Movies</h3>
+                <a class="btn btn-primary" href="{% url 'add_movie' %}" role="button">Add a New Movie</a>
+            </div>
+            <div class="row my-2">
+                {% if page_obj %}
+                {% for movie in page_obj %}
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card">
+                        <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" class="card-img-top post-image">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ movie.title }}</h5>
+                            <p class="card-text">{{ movie.description|truncatewords:30 }}</p>
+                            <p class="card-text"><small class="text-muted">Released on {{ movie.release_date|date:"Y-m-d" }}</small></p>
+                            <a href="{% url 'movie_details' pk=movie.pk %}" class="btn btn-primary">More</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="col-12">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                            {% endif %}
+                            {% for num in page_obj.paginator.page_range %}
+                            <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% else %}
+                <p>No movies have been added yet.</p>
+                {% endif %}
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

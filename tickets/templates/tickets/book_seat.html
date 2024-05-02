@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<title>Book Seats for {{ session.movie.title }}</title>
+<link href="{% static 'css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">{% include 'nav.html' %}
+    <h2>Book Seats for {{ session.movie.title }} on {{ session.start_time|date:"Y-m-d H:i" }}</h2>
+    <div class="row">
+        {% for seat in seats %}
+        <div class="col-md-4">
+            <div class="card mb-3 {% if seat.is_occupied %}bg-danger{% else %}bg-success{% endif %}">
+                <div class="card-body">
+                    <h5 class="card-title">Seat {{ seat.seat_number }}</h5>
+                    {% if seat.is_occupied %}
+                        <p class="card-text">Occupied by {{ seat.user.username }}</p>
+                    {% else %}
+                        <form method="POST" action="{% url 'book_seat' session_id=session.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="seat_id" value="{{ seat.id }}">
+                            <button type="submit" class="btn btn-primary">Book</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row mt-4">
+        <form method="POST" action="{% url 'book_seat' session_id=session.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Add New Seat</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
